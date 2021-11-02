@@ -32,7 +32,7 @@ import java.io.*;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
 public class Main extends Application {
 
@@ -134,61 +134,50 @@ public class Main extends Application {
                                 if (board.getPiece(selectedPiece.get(), board.pieces) instanceof Pawn && y == 0) {
                                     int PawnIndex = selectedPiece.get();
                                     hasClicked.set(true);
-                                    final ToggleGroup pawnSelect = new ToggleGroup();
-                                    RadioButton q = new RadioButton("Queen");
-                                    q.setToggleGroup(pawnSelect);
-                                    q.setMaxWidth(80);
-                                    RadioButton r = new RadioButton("Rook");
-                                    r.setMaxWidth(80);
-                                    r.setToggleGroup(pawnSelect);
-                                    RadioButton b = new RadioButton("Bishop");
-                                    b.setToggleGroup(pawnSelect);
-                                    b.setMaxWidth(80);
-                                    RadioButton k = new RadioButton("Knight");
-                                    k.setToggleGroup(pawnSelect);
-                                    k.setMaxWidth(80);
-                                    pawnSelect.selectToggle(q);
-                                    VBox box = new VBox();
-                                    Label text = new Label("Please make a selection.");
-                                    text.setMaxWidth(150);
-                                    box.getChildren().add(text);
-                                    box.getChildren().addAll(q, r, b, k);
-                                    box.autosize();
-                                    box.setAlignment(Pos.CENTER);
-                                    Button select = new Button("Select");
-                                    select.setMaxSize(60, 10);
-                                    toggleDisableButtons(squares);
-                                    select.setOnMouseClicked(d -> {
-                                        if (q.isSelected()) {
-                                            board.pieces.set(PawnIndex - 1, new Queen(x, y, chessboard, PawnIndex));
-                                        } else if (r.isSelected()) {
-                                            board.pieces.set(PawnIndex - 1, new Rook(x, y, chessboard, PawnIndex));
-                                        } else if (b.isSelected()) {
-                                            board.pieces.set(PawnIndex - 1, new Bishop(x, y, chessboard, PawnIndex));
-                                        } else if (k.isSelected()) {
-                                            board.pieces.set(PawnIndex - 1, new Knight(x, y, chessboard, PawnIndex));
-                                        }
-                                        box.getChildren().clear();
-                                        try {
-                                            setImages(board, squares);
-                                        } catch (Exception o) {
-                                            o.getMessage();
-                                        }
-                                        toggleDisableButtons(squares);
-                                        if(board.isEndgame(-1, chessboard) == 1){
-                                            Label label = new Label("CHECKMATE: WHITE WINS      ");
-                                            root.setTop(label);
-                                            toggleDisableButtons(squares);
-                                        }
-                                        else if(board.isEndgame(-1, chessboard) == -1 || board.isEndgame(1, chessboard) == -1){
-                                            Label label = new Label("STALEMATE: DRAW       ");
-                                            root.setTop(label);
-                                            toggleDisableButtons(squares);
-                                        }
-                                    });
+                                    final String[] dialogData = {"Queen", "Bishop", "Rook", "Knight"};
+                                    List<String> data = Arrays.asList(dialogData);
+                                    ChoiceDialog dialog = new ChoiceDialog(data.get(0), data);
 
-                                    box.getChildren().add(select);
-                                    root.setRight(box);
+                                    toggleDisableButtons(squares);
+                                    dialog.setTitle("Pawn Promotion");
+                                    dialog.setHeaderText("Please make a selection.");
+                                    Optional<String> result = dialog.showAndWait();
+                                    String select = "Queen";
+                                    if(result.isPresent()){
+                                        select = result.get();
+                                    }
+
+
+
+                                    if (select.equals("Queen")) {
+                                        board.pieces.set(PawnIndex - 1, new Queen(x, y, chessboard, PawnIndex));
+                                    } else if (select.equals("Rook")) {
+                                        board.pieces.set(PawnIndex - 1, new Rook(x, y, chessboard, PawnIndex));
+                                    } else if (select.equals("Bishop")) {
+                                        board.pieces.set(PawnIndex - 1, new Bishop(x, y, chessboard, PawnIndex));
+                                    } else if (select.equals("Knight")) {
+                                        board.pieces.set(PawnIndex - 1, new Knight(x, y, chessboard, PawnIndex));
+                                    }
+
+                                    try {
+                                        setImages(board, squares);
+                                    } catch (Exception o) {
+                                        o.getMessage();
+                                    }
+                                    toggleDisableButtons(squares);
+                                    if(board.isEndgame(-1, chessboard) == 1){
+                                        Label label = new Label("CHECKMATE: WHITE WINS      ");
+                                        root.setTop(label);
+                                        toggleDisableButtons(squares);
+                                    }
+                                    else if(board.isEndgame(-1, chessboard) == -1 || board.isEndgame(1, chessboard) == -1){
+                                        Label label = new Label("STALEMATE: DRAW       ");
+                                        root.setTop(label);
+                                        toggleDisableButtons(squares);
+                                    }
+
+
+
 
                                 }
 
@@ -269,65 +258,49 @@ public class Main extends Application {
                                 if(board.getPiece(selectedPiece.get(), board.pieces) instanceof Pawn && y == 7){
                                     int PawnIndex = selectedPiece.get();
                                     hasClicked.set(true);
-                                    final ToggleGroup pawnSelect = new ToggleGroup();
-                                    RadioButton q = new RadioButton("Queen");
-                                    q.setToggleGroup(pawnSelect);
-                                    q.setMaxWidth(80);
-                                    RadioButton r = new RadioButton("Rook");
-                                    r.setMaxWidth(80);
-                                    r.setToggleGroup(pawnSelect);
-                                    RadioButton b = new RadioButton("Bishop");
-                                    b.setToggleGroup(pawnSelect);
-                                    b.setMaxWidth(80);
-                                    RadioButton k = new RadioButton("Knight");
-                                    k.setToggleGroup(pawnSelect);
-                                    k.setMaxWidth(80);
-                                    pawnSelect.selectToggle(q);
-                                    VBox box = new VBox();
-                                    Label text = new Label("Please make a selection.");
-                                    text.setMaxWidth(150);
-                                    box.getChildren().add(text);
-                                    box.getChildren().addAll(q, r, b, k);
-                                    box.autosize();
-                                    box.setAlignment(Pos.CENTER);
-                                    Button select = new Button("Select");
-                                    select.setMaxSize(60, 10);
+                                    final String[] dialogData = {"Queen", "Bishop", "Rook", "Knight"};
+                                    List<String> data = Arrays.asList(dialogData);
+                                    ChoiceDialog dialog = new ChoiceDialog(data.get(0), data);
+                                    dialog.setTitle("Pawn Promotion");
+                                    dialog.setHeaderText("Please make a selection.");
+                                    Optional<String> result = dialog.showAndWait();
+                                    String select = "Queen";
+                                    if(result.isPresent()){
+                                        select = result.get();
+                                    }
                                     toggleDisableButtons(squares);
-                                    select.setOnMouseClicked(d -> {
-                                        if (q.isSelected()) {
-                                            board.pieces.set(PawnIndex*(-1) + 15, new Queen(x, y, chessboard, PawnIndex));
-                                        }
-                                        else if(r.isSelected()){
-                                            board.pieces.set(PawnIndex*(-1) + 15, new Rook(x, y, chessboard, PawnIndex));
-                                        }
-                                        else if(b.isSelected()){
-                                            board.pieces.set(PawnIndex*(-1) + 15, new Bishop(x, y, chessboard, PawnIndex));
-                                        }
-                                        else if(k.isSelected()){
-                                            board.pieces.set(PawnIndex*(-1) + 15, new Knight(x, y, chessboard, PawnIndex));
-                                        }
-                                        box.getChildren().clear();
-                                        try {
-                                            setImages(board, squares);
-                                        }
-                                        catch (Exception o){
-                                            o.getMessage();
-                                        }
-                                        toggleDisableButtons(squares);
-                                        if(board.isEndgame(1, chessboard) == 1){
-                                            Label label = new Label("CHECKMATE: BLACK WINS      ");
-                                            root.setTop(label);
-                                            toggleDisableButtons(squares);
-                                        }
-                                        else if(board.isEndgame(1, chessboard) == -1 || board.isEndgame(1, chessboard) == -1){
-                                            Label label = new Label("STALEMATE: DRAW       ");
-                                            root.setTop(label);
-                                            toggleDisableButtons(squares);
-                                        }
-                                    });
+                                    if (select.equals("Queen")) {
+                                        board.pieces.set(PawnIndex*(-1) + 15, new Queen(x, y, chessboard, PawnIndex));
+                                    }
+                                    else if(select.equals("Rook")){
+                                        board.pieces.set(PawnIndex*(-1) + 15, new Rook(x, y, chessboard, PawnIndex));
+                                    }
+                                    else if(select.equals("Bishop")){
+                                        board.pieces.set(PawnIndex*(-1) + 15, new Bishop(x, y, chessboard, PawnIndex));
+                                    }
+                                    else if(select.equals("Knight")){
+                                        board.pieces.set(PawnIndex*(-1) + 15, new Knight(x, y, chessboard, PawnIndex));
+                                    }
 
-                                    box.getChildren().add(select);
-                                    root.setRight(box);
+                                    try {
+                                        setImages(board, squares);
+                                    }
+                                    catch (Exception o){
+                                        o.getMessage();
+                                    }
+                                    toggleDisableButtons(squares);
+                                    if(board.isEndgame(1, chessboard) == 1){
+                                        Label label = new Label("CHECKMATE: BLACK WINS      ");
+                                        root.setTop(label);
+                                        toggleDisableButtons(squares);
+                                    }
+                                    else if(board.isEndgame(1, chessboard) == -1 || board.isEndgame(1, chessboard) == -1){
+                                        Label label = new Label("STALEMATE: DRAW       ");
+                                        root.setTop(label);
+                                        toggleDisableButtons(squares);
+                                    }
+
+
 
                                 }
 
